@@ -14,6 +14,10 @@ class AttendeeResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+
+            'name' => $this->user->name,
+            'event' => $this->event->name
+        ];
     }
 }
