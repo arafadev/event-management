@@ -18,9 +18,18 @@ class EventController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum')->except(['index', 'show']);
+    }
+
+
     public function index()
     {
         $query = $this->loadRelationships(Event::query());
+
 
         return EventResource::collection(
             $query->latest()->paginate()
@@ -40,8 +49,10 @@ class EventController extends Controller
                 'description' => 'nullable|string',
                 'start_time' => 'required|date',
                 'end_time' => 'required|date|after:start_time',
-                'user_id' => 'required|integer|exists:users,id'
+                // 'user_id' => 'required|integer|exists:users,id'
             ]),
+            'user_id' => $request->user()->id
+
         ]);
 
         return new EventResource($this->loadRelationships($event));
